@@ -18,14 +18,12 @@ void keyReleased()
 
 void mouseMoved()
 {
-  if (pmouseX == int(width * 0.5)) { p.horizonDir.rotate((mouseX - pmouseX) * 0.003); }
-  r.mouseMove(int(width * 0.5), int(height * 0.5));
+  p.mouseMovedAndDragged();
 }
 
 void mouseDragged()
 {
-  if (pmouseX == int(width * 0.5)) { p.horizonDir.rotate((mouseX - pmouseX) * 0.003); }
-  r.mouseMove(int(width * 0.5), int(height * 0.5));
+  p.mouseMovedAndDragged();
 }
 
 void setup()
@@ -54,7 +52,7 @@ void draw()
   p.update();
   
   // DRAW
-  background(200);
+  background(0);
   cam.draw();
   g.draw();
   p.draw();
