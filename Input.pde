@@ -9,6 +9,7 @@ class Input
     else if (key == 'd') { keys[1] = 1; }
     else if (key == 'w') { keys[2] = 1; }
     else if (key == 's') { keys[3] = 1; }
+    else if (key == ' ') { keys[4] = 1; }
   }
   
   void keyReleased()
@@ -17,6 +18,7 @@ class Input
     else if (key == 'd') { keys[1] = 0; }
     else if (key == 'w') { keys[2] = 0; }
     else if (key == 's') { keys[3] = 0; }
+    else if (key == ' ') { keys[4] = 0; }
   }
   
   // Move inputs
@@ -24,4 +26,5 @@ class Input
   int getMoveRight() { return keys[1]; }
   int getMoveForward() { return keys[2]; }
   int getMoveBackward() { return keys[3]; }
+  int getActionJump() { return keys[4]; }
 }

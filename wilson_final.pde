@@ -56,4 +56,11 @@ void draw()
   cam.draw();
   g.draw();
   p.draw();
+  
+  // DRAW GUI
+  hint(DISABLE_DEPTH_TEST);
+  camera();
+  noLights();
+  p.drawGui();
+  hint(ENABLE_DEPTH_TEST);
 }

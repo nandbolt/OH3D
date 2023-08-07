@@ -7,7 +7,7 @@ class Camera
     eye = new PVector(0, -5, 10);
     center = new PVector(0, 0, 0);
     up = new PVector(0, 1, 0);
-    perspective(PI/3.0, 16.0 / 9.0, 5, 100);
+    perspective(PI/3.0, 16.0 / 9.0, 5, 1000);
   }
   
   void draw()
