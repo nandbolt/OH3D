@@ -3,7 +3,7 @@ import java.awt.*;
 Input input;
 Camera cam;
 Player p;
-Ground g;
+World w;
 Robot r;
 
 void keyPressed()
@@ -36,7 +36,7 @@ void setup()
   input = new Input();
   cam = new Camera();
   p = new Player();
-  g = new Ground();
+  w = new World();
   try {
   r = new Robot();
   }
@@ -54,7 +54,7 @@ void draw()
   // DRAW
   background(0);
   cam.draw();
-  g.draw();
+  w.draw();
   p.draw();
   
   // DRAW GUI

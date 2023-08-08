@@ -11,9 +11,9 @@ class Player
   Player()
   {
     // Dimensions
-    w = 2;
-    h = 2;
-    d = 2;
+    w = 1;
+    h = 1;
+    d = 1;
     
     // Movement
     pos = new PVector(0, 0, 0);
@@ -137,7 +137,7 @@ class Player
   {
     // Model
     pushMatrix();
-    translate(pos.x, pos.y - h * 0.5, pos.z);
+    translate(pos.x, pos.y - 0.5, pos.z);
     rotateX(-PI * 0.5);
     rotateZ(-hDir.heading() + PI * 0.5);
     rotateY(-PI * 0.5);
