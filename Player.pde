@@ -1,39 +1,25 @@
 class Player extends Actor
 {
-  PShape hand;
-  PVector pos, hVel, hDir, vDir;
-  float yVel, jumpStrength, moveSpeed;
-  float w, h, d;
+  PVector goalHVel;
+  float jumpStrength, moveSpeed, gravStrength;
   float camMinDist;
-  float gravStrength;
   
   Player()
   {
-    // Dimensions
-    w = 1;
-    h = 1;
-    d = 1;
+    // Parent
+    super(0, 0, 0, 1, 1, 1);
     
     // Movement
-    pos = new PVector(0, 0, 0);
-    hVel = new PVector(0, 0);
-    yVel = 0;
+    goalHVel = new PVector(0, 0);
     moveSpeed = 0.6;
     jumpStrength = 0.3;
-    
-    // Camera
-    hDir = new PVector(0, 1);
-    vDir = new PVector(0.7, -0.7);
-    camMinDist = 20;
-    
-    // World
     gravStrength = 0.01;
     
+    // Camera
+    camMinDist = 20;
+    
     // Model
-    hand = loadShape("hand.obj");
-    hand.setFill(color(255));
-    //tex = loadImage("grid.png");
-    //hand.setTexture(tex);
+    body.setFill(color(255));
   }
   
   void mouseMovedAndDragged()
@@ -54,6 +40,11 @@ class Player extends Actor
     r.mouseMove(int(width * 0.5), int(height * 0.5));
   }
   
+  void mousePressed()
+  {
+    projs.add(new Blast(pos.x, pos.y, pos.z, -hDir.x, -hDir.y));
+  }
+  
   boolean checkOnGround()
   {
     if (pos.y >= 0) { return true; }
@@ -63,34 +54,23 @@ class Player extends Actor
   void update()
   {
     // Movement
-    hVel.x = 0;
-    hVel.y = 0;
-    if (input.getMoveForward() == 1)
-    {
-      hVel.x -= hDir.x;
-      hVel.y -= hDir.y;
-    }
-    if (input.getMoveBackward() == 1)
-    {
-      hVel.x += hDir.x;
-      hVel.y += hDir.y;
-    }
+    goalHVel.set(0, 0);
+    if (input.getMoveForward() == 1) { goalHVel.add(-hDir.x, -hDir.y); } 
+    if (input.getMoveBackward() == 1) { goalHVel.add(hDir); } 
     if (input.getMoveLeft() == 1)
     {
       hDir.rotate(PI * 0.5);
-      hVel.x += hDir.x;
-      hVel.y += hDir.y;
+      goalHVel.add(hDir);
       hDir.rotate(-PI * 0.5);
     }
     if (input.getMoveRight() == 1)
     {
       hDir.rotate(-PI * 0.5);
-      hVel.x += hDir.x;
-      hVel.y += hDir.y;
+      goalHVel.add(hDir);
       hDir.rotate(PI * 0.5);
     }
-    hVel.mult(moveSpeed);
-    //hVel.normalize();
+    goalHVel.mult(moveSpeed);
+    hVel.lerp(goalHVel, 0.1);
     
     // Ground check
     if (checkOnGround())
@@ -100,7 +80,6 @@ class Player extends Actor
       {
         // Jump
         yVel = -jumpStrength;
-        println(yVel);
       }
     }
     // Gravity
@@ -140,7 +119,7 @@ class Player extends Actor
     rotateX(-PI * 0.5);
     rotateZ(-hDir.heading() + PI * 0.5);
     rotateY(-PI * 0.5);
-    shape(hand);
+    shape(body);
     popMatrix();
     
     // Collision box
@@ -150,7 +129,7 @@ class Player extends Actor
     stroke(255);
     box(w, h, d);
     stroke(0, 255, 0);
-    line(0, 0, 0, hVel.x * 10, 0, hVel.y * 10);
+    line(0, 0, 0, hDir.x * 10, 0, hDir.y * 10);
     stroke(0);
     fill(255);
     popMatrix();
@@ -163,5 +142,6 @@ class Player extends Actor
     textAlign(LEFT, TOP);
     text("Pos: (" + int(pos.x) + ", " + int(pos.y) + ", " + int(pos.z) + ")", 0, 0);
     text("HSpeed: " + hVel.mag(), 0, 36);
+    text("Framerate: " + frameRate, 0, 36 * 2);
   }
 }

@@ -7,6 +7,8 @@ World w;
 Robot r;
 Chaser c;
 
+ArrayList<Projectile> projs = new ArrayList<Projectile>();
+
 void keyPressed()
 {
   input.keyPressed();
@@ -27,6 +29,11 @@ void mouseDragged()
   p.mouseMovedAndDragged();
 }
 
+void mousePressed()
+{
+  p.mousePressed();
+}
+
 void setup()
 {
   // Init game
@@ -38,7 +45,7 @@ void setup()
   cam = new Camera();
   p = new Player();
   w = new World();
-  c = new Chaser(0, 0, -20);
+  c = new Chaser(0, 0, -500);
   try {
   r = new Robot();
   }
@@ -53,6 +60,7 @@ void draw()
   // UPDATE
   p.update();
   c.update();
+  for (int i = 0; i < projs.size(); i++) { projs.get(i).update(); }
   
   // DRAW
   background(0);
@@ -60,6 +68,7 @@ void draw()
   w.draw();
   p.draw();
   c.draw();
+  for (int i = 0; i < projs.size(); i++) { projs.get(i).draw(); }
   
   // DRAW GUI
   hint(DISABLE_DEPTH_TEST);

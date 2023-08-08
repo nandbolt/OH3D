@@ -1,25 +1,15 @@
 class Chaser extends Enemy
 {
-  PShape body;
-  PVector pos, hVel;
   float moveSpeed;
-  float w, h, d;
   
   Chaser(float x, float y, float z)
   {
-    // Dimensions
-    w = 2;
-    h = 1;
-    d = 2;
+    // Parent
+    super(x, y, z, 2, 1, 2);
     
     // Movement
     moveSpeed = 1;
-    pos = new PVector(x, y, z);
-    hVel = new PVector(0, moveSpeed);
-    
-    // Model
-    body = loadShape("hand.obj");
-    body.setFill(color(255, 0, 0));
+    hVel.set(0, moveSpeed);
   }
   
   void update()
