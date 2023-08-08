@@ -5,19 +5,19 @@ class Input
   
   void keyPressed()
   {
-    if (key == 'a') { keys[0] = 1; }
-    else if (key == 'd') { keys[1] = 1; }
-    else if (key == 'w') { keys[2] = 1; }
-    else if (key == 's') { keys[3] = 1; }
+    if (key == 'a' || key == 'A') { keys[0] = 1; }
+    else if (key == 'd' || key == 'D') { keys[1] = 1; }
+    else if (key == 'w' || key == 'W') { keys[2] = 1; }
+    else if (key == 's' || key == 'S') { keys[3] = 1; }
     else if (key == ' ') { keys[4] = 1; }
   }
   
   void keyReleased()
   {
-    if (key == 'a') { keys[0] = 0; }
-    else if (key == 'd') { keys[1] = 0; }
-    else if (key == 'w') { keys[2] = 0; }
-    else if (key == 's') { keys[3] = 0; }
+    if (key == 'a' || key == 'A') { keys[0] = 0; }
+    else if (key == 'd' || key == 'D') { keys[1] = 0; }
+    else if (key == 'w' || key == 'W') { keys[2] = 0; }
+    else if (key == 's' || key == 'S') { keys[3] = 0; }
     else if (key == ' ') { keys[4] = 0; }
   }
   

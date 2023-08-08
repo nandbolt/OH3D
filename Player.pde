@@ -1,5 +1,7 @@
 class Player
 {
+  PShape hand;
+  PImage tex;
   PVector pos, hVel, hDir, vDir;
   float yVel, jumpStrength, moveSpeed;
   float w, h, d;
@@ -9,16 +11,16 @@ class Player
   Player()
   {
     // Dimensions
-    w = 5;
-    h = 5;
-    d = 5;
+    w = 2;
+    h = 2;
+    d = 2;
     
     // Movement
     pos = new PVector(0, 0, 0);
     hVel = new PVector(0, 0);
     yVel = 0;
     moveSpeed = 0.6;
-    jumpStrength = 0.6;
+    jumpStrength = 0.3;
     
     // Camera
     hDir = new PVector(0, 1);
@@ -26,7 +28,13 @@ class Player
     camMinDist = 20;
     
     // World
-    gravStrength = 0.02;
+    gravStrength = 0.01;
+    
+    // Model
+    hand = loadShape("hand.obj");
+    hand.setFill(color(255));
+    //tex = loadImage("grid.png");
+    //hand.setTexture(tex);
   }
   
   void mouseMovedAndDragged()
@@ -127,6 +135,15 @@ class Player
   
   void draw()
   {
+    // Model
+    pushMatrix();
+    translate(pos.x, pos.y - h * 0.5, pos.z);
+    rotateX(-PI * 0.5);
+    rotateZ(-hDir.heading() + PI * 0.5);
+    rotateY(-PI * 0.5);
+    shape(hand);
+    popMatrix();
+    
     // Collision box
     pushMatrix();
     translate(pos.x, pos.y - h * 0.5, pos.z);

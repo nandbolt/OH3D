@@ -7,21 +7,20 @@ class Ground
   
   Ground()
   {
-    w = 500;
-    h = 50;
-    d = 500;
-    pos = new PVector(0, h * 0.5, 0);
+    w = 50;
+    d = 50;
+    pos = new PVector(0, 0, 0);
     tex = loadImage("grid.png");
     textureMode(NORMAL);
     //ground = createShape();
     ground = createShape();
     ground.beginShape(QUADS);
     ground.texture(tex);
-    ground.vertex(-w * 0.5, -h * 0.5, -d * 0.5, 0, 0);
-    ground.vertex(w * 0.5, -h * 0.5, -d * 0.5, 0, w * 0.1);
-    ground.vertex(w * 0.5, -h * 0.5, d * 0.5, w * 0.1, w * 0.1);
-    ground.vertex(-w * 0.5, -h * 0.5, d * 0.5, w * 0.1, 0);
-    ground.vertex(-w * 0.5, -h * 0.5, -d * 0.5, 0, 0);
+    ground.vertex(-w * 0.5, 0, -d * 0.5, 0, 0);
+    ground.vertex(w * 0.5, 0, -d * 0.5, 0, w * 0.1);
+    ground.vertex(w * 0.5, 0, d * 0.5, w * 0.1, w * 0.1);
+    ground.vertex(-w * 0.5, 0, d * 0.5, w * 0.1, 0);
+    ground.vertex(-w * 0.5, 0, -d * 0.5, 0, 0);
     //ground.vertex(0, 0, 0, 0);
     //ground.vertex(w, 0, 0, 0, 0);
     //ground.vertex(w, 0, d, 2);
