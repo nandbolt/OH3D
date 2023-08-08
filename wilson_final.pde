@@ -5,6 +5,7 @@ Camera cam;
 Player p;
 World w;
 Robot r;
+Chaser c;
 
 void keyPressed()
 {
@@ -37,6 +38,7 @@ void setup()
   cam = new Camera();
   p = new Player();
   w = new World();
+  c = new Chaser(0, 0, -20);
   try {
   r = new Robot();
   }
@@ -50,12 +52,14 @@ void draw()
 {
   // UPDATE
   p.update();
+  c.update();
   
   // DRAW
   background(0);
   cam.draw();
   w.draw();
   p.draw();
+  c.draw();
   
   // DRAW GUI
   hint(DISABLE_DEPTH_TEST);

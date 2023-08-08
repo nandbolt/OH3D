@@ -1,7 +1,6 @@
-class Player
+class Player extends Actor
 {
   PShape hand;
-  PImage tex;
   PVector pos, hVel, hDir, vDir;
   float yVel, jumpStrength, moveSpeed;
   float w, h, d;
@@ -150,6 +149,8 @@ class Player
     noFill();
     stroke(255);
     box(w, h, d);
+    stroke(0, 255, 0);
+    line(0, 0, 0, hVel.x * 10, 0, hVel.y * 10);
     stroke(0);
     fill(255);
     popMatrix();
@@ -161,5 +162,6 @@ class Player
     textSize(32);
     textAlign(LEFT, TOP);
     text("Pos: (" + int(pos.x) + ", " + int(pos.y) + ", " + int(pos.z) + ")", 0, 0);
+    text("HSpeed: " + hVel.mag(), 0, 36);
   }
 }
