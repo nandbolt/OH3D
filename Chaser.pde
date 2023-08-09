@@ -14,15 +14,16 @@ class Chaser extends Enemy
   
   void update()
   {
-    // Rotate
-    //hVel.rotate(0.02);
-    PVector r = new PVector(p.pos.x - pos.x, p.pos.z - pos.z);
-    r.setMag(moveSpeed);
-    //hVel.rotate(constrain(PVector.angleBetween(hVel, r), -0.02, 0.02));
-    hVel.lerp(r, 0.02);
-    hDir.rotate(Math.angleDifference(hDir.heading(), hVel.heading()));
-    
-    // Position
-    pos.add(hVel.x, 0, hVel.y);
+    if (!world.player.dead)
+    {
+      // Rotate
+      PVector r = new PVector(world.player.pos.x - pos.x, world.player.pos.z - pos.z);
+      r.setMag(moveSpeed);
+      hVel.lerp(r, 0.02);
+      hDir.rotate(Math.angleDifference(hDir.heading(), hVel.heading()));
+      
+      // Position
+      pos.add(hVel.x, 0, hVel.y);
+    }
   }
 }

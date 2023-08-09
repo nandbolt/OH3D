@@ -49,7 +49,6 @@ class Actor extends Object
       // Look direction
       line(0, 0, 0, hDir.x * 3, 0, hDir.y * 3);
       
-      
       // Debug END
       stroke(0);
       fill(255);

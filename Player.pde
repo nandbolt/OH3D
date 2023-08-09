@@ -2,13 +2,15 @@ class Player extends Actor
 {
   PVector goalHVel;
   float jumpStrength, moveSpeed, gravStrength;
-  float camMinDist;
+  float camMinHDist, camMaxHeight;
   int stepsAlive;
+  boolean dead;
   
   Player()
   {
     // Parent
     super(0, 0, 0, 1, 1, 1);
+    dead = false;
     
     // Dimensions
     hDir.rotate(-PI/4);
@@ -20,33 +22,51 @@ class Player extends Actor
     gravStrength = 0.01;
     
     // Camera
-    camMinDist = 20;
+    camMinHDist = 20;
+    camMaxHeight = 20;
     
     // Model
     body.setFill(color(255));
   }
   
+  void restart()
+  {
+    dead = false;
+    stepsAlive = 0;
+    
+    pos.set(0, 0, 0);
+    hVel.set(0, 0);
+    yVel = 0;
+    hDir.set(0, 1);
+    hDir.rotate(-PI/4);
+    vDir.set(0.7, -0.7);
+    goalHVel.set(0, 0);
+  }
+  
   void mouseMovedAndDragged()
   {
-    // Rotate horizontally
-    if (pmouseX == int(width * 0.5)) { hDir.rotate((mouseX - pmouseX) * 0.003); }
-    
-    // Rotate vertically
-    if (pmouseY == int(height * 0.5))
-    {
-      // Clamp rotation
-      float currAngle = vDir.heading();
-      float goalDir = (mouseY - pmouseY) * 0.003;
-      if ((goalDir > 0 && currAngle + goalDir < -0.2) || (goalDir < 0 && currAngle + goalDir > -1.3)) { vDir.rotate(goalDir); }
+    if (!dead)
+    { 
+      // Rotate horizontally
+      if (pmouseX == int(width * 0.5)) { hDir.rotate((mouseX - pmouseX) * 0.003); }
+      
+      // Rotate vertically
+      if (pmouseY == int(height * 0.5))
+      {
+        // Clamp rotation
+        float currAngle = vDir.heading();
+        float goalDir = (mouseY - pmouseY) * 0.003;
+        if ((goalDir > 0 && currAngle + goalDir < -0.2) || (goalDir < 0 && currAngle + goalDir > -1.5)) { vDir.rotate(goalDir); }
+      }
     }
     
     // Move mouse back to center
-    r.mouseMove(int(width * 0.5), int(height * 0.5));
+    robot.mouseMove(int(width * 0.5), int(height * 0.5));
   }
   
   void mousePressed()
   {
-    projs.add(new Blast(pos.x, pos.y, pos.z, hDir.x, hDir.y));
+    if (!dead) { world.projs.add(new Blast(pos.x, pos.y, pos.z, hDir.x, hDir.y)); }
   }
   
   boolean checkOnGround()
@@ -55,7 +75,7 @@ class Player extends Actor
     return false;
   }
   
-  void update()
+  void aliveUpdate()
   {
     // Alive timer
     stepsAlive++;
@@ -105,22 +125,45 @@ class Player extends Actor
     pos.add(hVel.x, yVel, hVel.y);
     
     // Camera movement
-    cam.eye.x = pos.x;
-    cam.eye.z = pos.z;
-    cam.eye.y = pos.y;
-    cam.center.x = pos.x;
-    cam.center.y = pos.y;
-    cam.center.z = pos.z;
+    world.cam.eye.x = pos.x;
+    world.cam.eye.z = pos.z;
+    world.cam.eye.y = pos.y;
+    world.cam.center.x = pos.x;
+    world.cam.center.y = pos.y;
+    world.cam.center.z = pos.z;
     
     // Camera rotation
-    cam.eye.x -= hDir.x * camMinDist;
-    cam.eye.y -= vDir.x * camMinDist;
-    cam.eye.z -= hDir.y * camMinDist;
+    world.cam.eye.x -= hDir.x * camMinHDist;
+    world.cam.eye.y -= vDir.x * camMaxHeight;
+    world.cam.eye.z -= hDir.y * camMinHDist;
+    
+    // Collision
+    for (int i = 0; i < world.enemies.size(); i++)
+    {
+      Enemy e = world.enemies.get(i);
+      if (Math.colliding(pos, w, h, d, e.pos, e.w, e.h, e.d))
+      {
+        dead = true;
+        break;
+      }
+    }
+  }
+  
+  void update()
+  {
+    if (!dead) { aliveUpdate(); }
+    else if (keyPressed && (key == 'r' || key == 'R')) { world.restart(); }
+  }
+  
+  void draw()
+  {
+    if (!dead) { super.draw(); }
   }
   
   void drawGui()
   {
     float x, y;
+    String time = String.format("%.1f", stepsAlive / 60.0);
     
     // Timer
     x = 64;
@@ -129,18 +172,25 @@ class Player extends Actor
     shearY(PI / 16);
     textSize(32);
     textAlign(LEFT, TOP);
-    text(String.format("%.1f", stepsAlive / 60.0), x, y);
+    text(time, x, y);
+    
+    // Dead
+    if (dead)
+    {
+      y += 36 * 2;
+      text("Press R to restart.", x, y);
+    }
     
     if (debugMode)
     {
-      y += 36;
+      y += 36 * 2;
       text("Pos: (" + int(pos.x) + ", " + int(pos.y) + ", " + int(pos.z) + ")", x, y);
       y += 36;
       text("HSpeed: " + hVel.mag(), x, y);
       y += 36;
-      text("Framerate: " + frameRate, x, y);
+      text("Framerate: " + int(frameRate), x, y);
       y += 36;
-      text("Enemies: " + enemies.size(), x, y);
+      text("Enemies: " + world.enemies.size(), x, y);
     }
     
     shearY(-PI / 16);

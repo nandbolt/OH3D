@@ -2,14 +2,9 @@ import java.awt.*;
 
 boolean debugMode;
 
+Robot robot;
 Input input;
-Camera cam;
-Player p;
-World w;
-Robot r;
-
-ArrayList<Projectile> projs = new ArrayList<Projectile>();
-ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+World world;
 
 void keyPressed()
 {
@@ -23,17 +18,17 @@ void keyReleased()
 
 void mouseMoved()
 {
-  p.mouseMovedAndDragged();
+  world.player.mouseMovedAndDragged();
 }
 
 void mouseDragged()
 {
-  p.mouseMovedAndDragged();
+  world.player.mouseMovedAndDragged();
 }
 
 void mousePressed()
 {
-  p.mousePressed();
+  world.player.mousePressed();
 }
 
 void setup()
@@ -43,46 +38,29 @@ void setup()
   noCursor();
   debugMode = false;
   
-  // Init objects
-  input = new Input();
-  cam = new Camera();
-  p = new Player();
-  w = new World();
-  enemies.add(new Chaser(200, 0, 200));
-  enemies.add(new Chaser(200, 0, 100));
-  enemies.add(new Chaser(100, 0, 200));
+  // IRobot
   try
   {
-    r = new Robot();
+    robot = new Robot();
   }
   catch (AWTException e)
   {
     e.printStackTrace();
   }
   
+  // Init objects
+  input = new Input();
+  world = new World();
+  
   // Move mouse to center
-  r.mouseMove(int(width * 0.5), int(height * 0.5));
+  robot.mouseMove(int(width * 0.5), int(height * 0.5));
 }
 
 void draw()
 {
   // UPDATE
-  p.update();
-  for (int i = 0; i < projs.size(); i++) { projs.get(i).update(); }
-  for (int i = 0; i < enemies.size(); i++) { enemies.get(i).update(); }
+  world.update();
   
   // DRAW
-  background(0);
-  cam.draw();
-  w.draw();
-  p.draw();
-  for (int i = 0; i < projs.size(); i++) { projs.get(i).draw(); }
-  for (int i = 0; i < enemies.size(); i++) { enemies.get(i).draw(); }
-  
-  // DRAW GUI
-  hint(DISABLE_DEPTH_TEST);
-  camera();
-  noLights();
-  p.drawGui();
-  hint(ENABLE_DEPTH_TEST);
+  world.draw();
 }

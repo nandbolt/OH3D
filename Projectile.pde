@@ -54,12 +54,12 @@ class Projectile extends Object
     pos.add(hVel.x, yVel, hVel.y);
     
     // Collision
-    for (int i = 0; i < enemies.size(); i++)
+    for (int i = 0; i < world.enemies.size(); i++)
     {
-      Enemy e = enemies.get(i);
+      Enemy e = world.enemies.get(i);
       if (Math.colliding(pos, w, h, d, e.pos, e.w, e.h, e.d))
       {
-        enemies.remove(i);
+        world.enemies.remove(i);
         dead = true;
         break;
       }
@@ -72,11 +72,11 @@ class Projectile extends Object
     // Remove from projectiles if dead
     if (dead)
     {
-      for (int i = 0; i < projs.size(); i++)
+      for (int i = 0; i < world.projs.size(); i++)
       {
-        if (projs.get(i) == this)
+        if (world.projs.get(i) == this)
         {
-          projs.remove(i);
+          world.projs.remove(i);
           break;
         }
       }
