@@ -3,6 +3,7 @@ class Player extends Actor
   PVector goalHVel;
   float jumpStrength, moveSpeed, gravStrength;
   float camMinDist;
+  int stepsAlive;
   
   Player()
   {
@@ -56,6 +57,9 @@ class Player extends Actor
   
   void update()
   {
+    // Alive timer
+    stepsAlive++;
+    
     // Movement
     goalHVel.set(0, 0);
     if (input.getMoveForward() == 1) { goalHVel.add(hDir); } 
@@ -116,11 +120,29 @@ class Player extends Actor
   
   void drawGui()
   {
-    fill(255);
+    float x, y;
+    
+    // Timer
+    x = 64;
+    y = 32;
+    fill(0, 255, 0);
+    shearY(PI / 16);
     textSize(32);
     textAlign(LEFT, TOP);
-    text("Pos: (" + int(pos.x) + ", " + int(pos.y) + ", " + int(pos.z) + ")", 0, 0);
-    text("HSpeed: " + hVel.mag(), 0, 36);
-    text("Framerate: " + frameRate, 0, 36 * 2);
+    text(String.format("%.1f", stepsAlive / 60.0), x, y);
+    
+    if (debugMode)
+    {
+      y += 36;
+      text("Pos: (" + int(pos.x) + ", " + int(pos.y) + ", " + int(pos.z) + ")", x, y);
+      y += 36;
+      text("HSpeed: " + hVel.mag(), x, y);
+      y += 36;
+      text("Framerate: " + frameRate, x, y);
+      y += 36;
+      text("Enemies: " + enemies.size(), x, y);
+    }
+    
+    shearY(-PI / 16);
   }
 }

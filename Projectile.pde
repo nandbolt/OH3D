@@ -4,6 +4,7 @@ class Projectile extends Object
   float w, h, d;
   float gravStrength;
   float lifeTimer, stepsAlive;
+  boolean dead;
   
   Projectile(float x, float y, float z, float w, float h, float d, float xHVel, float yHVel)
   {
@@ -26,6 +27,7 @@ class Projectile extends Object
     // Life
     lifeTimer = 0;
     stepsAlive = 120;
+    dead = false;
   }
   
   boolean checkOnGround()
@@ -51,9 +53,24 @@ class Projectile extends Object
     // Position
     pos.add(hVel.x, yVel, hVel.y);
     
+    // Collision
+    for (int i = 0; i < enemies.size(); i++)
+    {
+      Enemy e = enemies.get(i);
+      if (Math.colliding(pos, w, h, d, e.pos, e.w, e.h, e.d))
+      {
+        enemies.remove(i);
+        dead = true;
+        break;
+      }
+    }
+    
     // Lifetimer
     if (lifeTimer < stepsAlive) { lifeTimer++; }
-    else
+    else { dead = true; }
+    
+    // Remove from projectiles if dead
+    if (dead)
     {
       for (int i = 0; i < projs.size(); i++)
       {
