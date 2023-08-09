@@ -21,6 +21,7 @@ class Projectile extends Object
     
     // Model
     body = loadShape("hand.obj");
+    body.setFill(color(255));
     
     // Life
     lifeTimer = 0;
@@ -76,14 +77,17 @@ class Projectile extends Object
     shape(body);
     popMatrix();
     
-    // Collision box
-    pushMatrix();
-    translate(pos.x, pos.y - h * 0.5, pos.z);
-    noFill();
-    stroke(255);
-    box(w, h, d);
-    stroke(0);
-    fill(255);
-    popMatrix();
+    if (debugMode)
+    {
+      // Collision box
+      pushMatrix();
+      translate(pos.x, pos.y - h * 0.5, pos.z);
+      noFill();
+      stroke(255);
+      box(w, h, d);
+      stroke(0);
+      fill(255);
+      popMatrix();
+    }
   }
 }

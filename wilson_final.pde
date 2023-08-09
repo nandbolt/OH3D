@@ -1,13 +1,15 @@
 import java.awt.*;
 
+boolean debugMode;
+
 Input input;
 Camera cam;
 Player p;
 World w;
 Robot r;
-Chaser c;
 
 ArrayList<Projectile> projs = new ArrayList<Projectile>();
+ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 
 void keyPressed()
 {
@@ -39,36 +41,43 @@ void setup()
   // Init game
   fullScreen(P3D);
   noCursor();
+  debugMode = false;
   
   // Init objects
   input = new Input();
   cam = new Camera();
   p = new Player();
   w = new World();
-  c = new Chaser(0, 0, -500);
-  try {
-  r = new Robot();
+  enemies.add(new Chaser(200, 0, 200));
+  enemies.add(new Chaser(200, 0, 100));
+  enemies.add(new Chaser(100, 0, 200));
+  try
+  {
+    r = new Robot();
   }
   catch (AWTException e)
   {
     e.printStackTrace();
   }
+  
+  // Move mouse to center
+  r.mouseMove(int(width * 0.5), int(height * 0.5));
 }
 
 void draw()
 {
   // UPDATE
   p.update();
-  c.update();
   for (int i = 0; i < projs.size(); i++) { projs.get(i).update(); }
+  for (int i = 0; i < enemies.size(); i++) { enemies.get(i).update(); }
   
   // DRAW
   background(0);
   cam.draw();
   w.draw();
   p.draw();
-  c.draw();
   for (int i = 0; i < projs.size(); i++) { projs.get(i).draw(); }
+  for (int i = 0; i < enemies.size(); i++) { enemies.get(i).draw(); }
   
   // DRAW GUI
   hint(DISABLE_DEPTH_TEST);

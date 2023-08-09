@@ -20,32 +20,9 @@ class Chaser extends Enemy
     r.setMag(moveSpeed);
     //hVel.rotate(constrain(PVector.angleBetween(hVel, r), -0.02, 0.02));
     hVel.lerp(r, 0.02);
+    hDir.rotate(Math.angleDifference(hDir.heading(), hVel.heading()));
     
     // Position
     pos.add(hVel.x, 0, hVel.y);
-  }
-  
-  void draw()
-  {
-    // Model
-    pushMatrix();
-    translate(pos.x, pos.y - 0.5, pos.z);
-    rotateX(-PI * 0.5);
-    rotateZ(-hVel.heading() - PI * 0.5);
-    rotateY(-PI * 0.5);
-    shape(body);
-    popMatrix();
-    
-    // Collision box
-    pushMatrix();
-    translate(pos.x, pos.y - h * 0.5, pos.z);
-    noFill();
-    stroke(255);
-    box(w, h, d);
-    stroke(0, 255, 0);
-    line(0, 0, 0, hVel.x * 20, 0, hVel.y * 20);
-    stroke(0);
-    fill(255);
-    popMatrix();
   }
 }

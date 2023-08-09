@@ -9,6 +9,9 @@ class Player extends Actor
     // Parent
     super(0, 0, 0, 1, 1, 1);
     
+    // Dimensions
+    hDir.rotate(-PI/4);
+    
     // Movement
     goalHVel = new PVector(0, 0);
     moveSpeed = 0.6;
@@ -42,7 +45,7 @@ class Player extends Actor
   
   void mousePressed()
   {
-    projs.add(new Blast(pos.x, pos.y, pos.z, -hDir.x, -hDir.y));
+    projs.add(new Blast(pos.x, pos.y, pos.z, hDir.x, hDir.y));
   }
   
   boolean checkOnGround()
@@ -55,19 +58,19 @@ class Player extends Actor
   {
     // Movement
     goalHVel.set(0, 0);
-    if (input.getMoveForward() == 1) { goalHVel.add(-hDir.x, -hDir.y); } 
-    if (input.getMoveBackward() == 1) { goalHVel.add(hDir); } 
+    if (input.getMoveForward() == 1) { goalHVel.add(hDir); } 
+    if (input.getMoveBackward() == 1) { goalHVel.add(-hDir.x, -hDir.y); } 
     if (input.getMoveLeft() == 1)
     {
-      hDir.rotate(PI * 0.5);
-      goalHVel.add(hDir);
       hDir.rotate(-PI * 0.5);
+      goalHVel.add(hDir);
+      hDir.rotate(PI * 0.5);
     }
     if (input.getMoveRight() == 1)
     {
-      hDir.rotate(-PI * 0.5);
-      goalHVel.add(hDir);
       hDir.rotate(PI * 0.5);
+      goalHVel.add(hDir);
+      hDir.rotate(-PI * 0.5);
     }
     goalHVel.mult(moveSpeed);
     hVel.lerp(goalHVel, 0.1);
@@ -106,33 +109,9 @@ class Player extends Actor
     cam.center.z = pos.z;
     
     // Camera rotation
-    cam.eye.x += hDir.x * camMinDist;
+    cam.eye.x -= hDir.x * camMinDist;
     cam.eye.y -= vDir.x * camMinDist;
-    cam.eye.z += hDir.y * camMinDist;
-  }
-  
-  void draw()
-  {
-    // Model
-    pushMatrix();
-    translate(pos.x, pos.y - 0.5, pos.z);
-    rotateX(-PI * 0.5);
-    rotateZ(-hDir.heading() + PI * 0.5);
-    rotateY(-PI * 0.5);
-    shape(body);
-    popMatrix();
-    
-    // Collision box
-    pushMatrix();
-    translate(pos.x, pos.y - h * 0.5, pos.z);
-    noFill();
-    stroke(255);
-    box(w, h, d);
-    stroke(0, 255, 0);
-    line(0, 0, 0, hDir.x * 10, 0, hDir.y * 10);
-    stroke(0);
-    fill(255);
-    popMatrix();
+    cam.eye.z -= hDir.y * camMinDist;
   }
   
   void drawGui()
