@@ -1,6 +1,6 @@
 class Player extends Actor
 {
-  PVector goalHVel;
+  PVector goalHVel, goalRotVel;
   float jumpStrength, moveSpeed, gravStrength;
   float camMinHDist, camMaxHeight;
   int stepsAlive;
@@ -14,9 +14,12 @@ class Player extends Actor
     
     // Dimensions
     hDir.rotate(-PI/4);
+    vDir.set(0.4, -0.9);
+    vDir.normalize();
     
     // Movement
     goalHVel = new PVector(0, 0);
+    goalRotVel = new PVector(0, 0);
     moveSpeed = 0.6;
     jumpStrength = 0.3;
     gravStrength = 0.01;
@@ -39,7 +42,8 @@ class Player extends Actor
     yVel = 0;
     hDir.set(0, 1);
     hDir.rotate(-PI/4);
-    vDir.set(0.7, -0.7);
+    vDir.set(0.4, -0.9);
+    vDir.normalize();
     goalHVel.set(0, 0);
   }
   
@@ -48,7 +52,8 @@ class Player extends Actor
     if (!dead)
     { 
       // Rotate horizontally
-      if (pmouseX == int(width * 0.5)) { hDir.rotate((mouseX - pmouseX) * 0.003); }
+      //if (pmouseX == int(width * 0.5)) { hDir.rotate((mouseX - pmouseX) * 0.003); }
+      if (pmouseX == int(width * 0.5)) { goalRotVel.x += (mouseX - pmouseX) * 0.003; }
       
       // Rotate vertically
       if (pmouseY == int(height * 0.5))
@@ -56,7 +61,8 @@ class Player extends Actor
         // Clamp rotation
         float currAngle = vDir.heading();
         float goalDir = (mouseY - pmouseY) * 0.003;
-        if ((goalDir > 0 && currAngle + goalDir < -0.2) || (goalDir < 0 && currAngle + goalDir > -1.5)) { vDir.rotate(goalDir); }
+        //if ((goalDir > 0 && currAngle + goalDir < -0.2) || (goalDir < 0 && currAngle + goalDir > -1.5)) { vDir.rotate(goalDir); }
+        if ((goalDir > 0 && currAngle + goalDir < -0.2) || (goalDir < 0 && currAngle + goalDir > -1.5)) { goalRotVel.y = goalDir; }
       }
     }
     
@@ -120,6 +126,14 @@ class Player extends Actor
         pos.y = 0;
       }
     }
+    
+    // Rotation
+    float xRotVel = lerp(0, goalRotVel.x, 0.3);
+    float yRotVel = lerp(0, goalRotVel.y, 0.6);
+    hDir.rotate(xRotVel);
+    vDir.rotate(yRotVel);
+    goalRotVel.x -= xRotVel;
+    goalRotVel.y -= yRotVel;
     
     // Position
     pos.add(hVel.x, yVel, hVel.y);

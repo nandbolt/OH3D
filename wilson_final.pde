@@ -1,3 +1,20 @@
+/*
+Checklist
+- Random wave spawning with custom spawn patterns, increase 
+- Movement
+- Healthier enemy types
+- Combo level
+- Hold to shoot
+- Weapon spray patterns
+- Follow the leader
+- Revised models
+- Revised textures
+- Shader background
+- Death animation
+- 3D particles
+*/
+
+
 import java.awt.*;
 
 boolean debugMode;
