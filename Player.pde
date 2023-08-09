@@ -158,6 +158,27 @@ class Player extends Actor
   void draw()
   {
     if (!dead) { super.draw(); }
+    else
+    {
+      // Death BEGIN
+      pushMatrix();
+      
+      // Body
+      translate(pos.x, pos.y - 0.5, pos.z);
+      scale(0.5);
+      rotateX(-PI * 0.5);
+      rotateZ(-hDir.heading() - PI * 0.5);
+      rotateY(-PI * 0.5);
+      translate(0, -1, 2);
+      shape(body);
+      translate(0, 0, -4);
+      shape(body);
+      translate(0, 4, 2);
+      shape(body);
+      
+      // Death END
+      popMatrix();
+    }
   }
   
   void drawGui()
