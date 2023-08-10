@@ -222,7 +222,13 @@ class Player extends Actor
       rotateX(-PI * 0.5);
       rotateZ(-hDir.heading() - PI * 0.5);
       rotateY(-PI * 0.5);
-      shape(proj);
+      scale((fireRate - weaponTimer) / (float) fireRate);
+      translate(0, 0, projSep * 0.5 * (projCount - 1));
+      for (int i = 0; i < projCount; i++)
+      {
+        shape(proj);
+        translate(0, 0, -projSep);
+      }
       
       // Projectiles END
       popMatrix();
