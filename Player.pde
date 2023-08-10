@@ -5,6 +5,7 @@ class Player extends Actor
   float camDist;
   int stepsAlive, enemiesKilled, maxDistance;
   boolean dead;
+  PShape proj;
   
   // Weapon
   int weaponTimer, fireRate, projCount, projSep;
@@ -32,6 +33,8 @@ class Player extends Actor
     // Model
     body = loadShape("disc.obj");
     body.setFill(color(255));
+    proj = loadShape("hand.obj");
+    proj.setFill(color(255));
     
     // Weapon
     weaponTimer = 0;
@@ -99,7 +102,7 @@ class Player extends Actor
     r.mult((projCount - 1) * projSep * 0.5);
     for (int i = 0; i < projCount; i++)
     {
-      world.projs.add(new Blast(pos.x + r.x, pos.y, pos.z + r.y, hDir.x, hDir.y));
+      world.projs.add(new Blast(pos.x + hDir.x * 3 + r.x, pos.y, pos.z + hDir.y * 3 + r.y, hDir.x, hDir.y));
       r.add(rInc);
     }
     weaponTimer = fireRate;
@@ -210,6 +213,19 @@ class Player extends Actor
     if (!dead)
     {
       super.draw();
+      
+      // Projectiles BEGIN
+      pushMatrix();
+      
+      // Body
+      translate(pos.x + hDir.x * 3, pos.y - 0.5, pos.z + hDir.y * 3);
+      rotateX(-PI * 0.5);
+      rotateZ(-hDir.heading() - PI * 0.5);
+      rotateY(-PI * 0.5);
+      shape(proj);
+      
+      // Projectiles END
+      popMatrix();
       
       if (debugMode)
       {
