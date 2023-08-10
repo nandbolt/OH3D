@@ -14,6 +14,12 @@ class World
   ArrayList<Enemy> enemies = new ArrayList<Enemy>();
   EnemySpawner espawner;
   
+  // High Scores
+  JSONArray saveData;
+  int highestStepsAlive;
+  int highestEnemiesKilled;
+  int highestMaxDistance;
+  
   World()
   {
     chunkSize = 300;
@@ -37,6 +43,12 @@ class World
     
     // Spikes
     spikes.add(new Spike(0, 0));
+    
+    // High Scores
+    saveData = loadJSONArray("save-data.txt");
+    highestStepsAlive = saveData.getJSONObject(0).getInt("value");
+    highestEnemiesKilled = saveData.getJSONObject(1).getInt("value");
+    highestMaxDistance = saveData.getJSONObject(2).getInt("value");
   }
   
   void restart()

@@ -133,6 +133,36 @@ class Player extends Actor
     return false;
   }
   
+  void die()
+  {
+    if (!dead)
+    {
+      dead = true;
+      
+      // Check high scores
+      boolean highScore = false;
+      if (stepsAlive > world.highestStepsAlive)
+      {
+        world.highestStepsAlive = stepsAlive;
+        world.saveData.getJSONObject(0).setInt("value", stepsAlive);
+        highScore = true;
+      }
+      if (enemiesKilled > world.highestEnemiesKilled)
+      {
+        world.highestEnemiesKilled = enemiesKilled;
+        world.saveData.getJSONObject(1).setInt("value", enemiesKilled);
+        highScore = true;
+      }
+      if (maxDistance > world.highestMaxDistance)
+      {
+        world.highestMaxDistance = maxDistance;
+        world.saveData.getJSONObject(2).setInt("value", maxDistance);
+        highScore = true;
+      }
+      if (highScore) { saveJSONArray(world.saveData, "data/save-data.txt"); }
+    }
+  }
+  
   void aliveUpdate()
   {
     // Alive timer
@@ -177,7 +207,7 @@ class Player extends Actor
     if (checkOnGround())
     {
       // If on spikes
-      if (onSpikes()) { dead = true; }
+      if (onSpikes()) { die(); }
       // Jump check
       else if (input.getActionJump() == 1)
       {
@@ -240,7 +270,7 @@ class Player extends Actor
       Enemy e = world.enemies.get(i);
       if (Math.colliding(pos, w, h, d, e.pos, e.w, e.h, e.d))
       {
-        dead = true;
+        die();
         break;
       }
     }
@@ -341,11 +371,17 @@ class Player extends Actor
     shearY(PI / 16);
     textSize(32);
     textAlign(LEFT, TOP);
-    text("Time alive: " + time, x, y);
+    if (stepsAlive >= world.highestStepsAlive) { fill(255, 255, 0); }
+    text("Time alive: " + time + " (" + String.format("%.1f", world.highestStepsAlive / 60.0) + ")", x, y);
+    fill(0, 255, 0);
     y += 36;
-    text("Enemies killed: " + enemiesKilled, x, y);
+    if (enemiesKilled >= world.highestEnemiesKilled) { fill(255, 255, 0); }
+    text("Enemies killed: " + enemiesKilled + " (" + world.highestEnemiesKilled + ")", x, y);
+    fill(0, 255, 0);
     y += 36;
-    text("Max distance: " + maxDistance, x, y);
+    if (maxDistance >= world.highestMaxDistance) { fill(255, 255, 0); }
+    text("Max distance: " + maxDistance + " (" + world.highestMaxDistance + ")", x, y);
+    fill(0, 255, 0);
     y += 36;
     
     // Dead

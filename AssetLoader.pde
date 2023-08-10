@@ -24,9 +24,7 @@ class AssetLoader
     playerBlast.setFill(color(255));
     
     // Chaser
-    chaserTex = loadImage("cross-red.png");
     chaserBody = loadShape("hand.obj");
-    //chaserBody.setTexture(chaserTex);
     chaserBody.setFill(color(255, 0, 0));
   }
 }
