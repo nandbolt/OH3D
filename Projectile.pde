@@ -4,7 +4,8 @@ class Projectile extends Object
   float w, h, d;
   float gravStrength;
   float lifeTimer, stepsAlive;
-  boolean dead;
+  boolean dead, pierce;
+  color pc;
   
   Projectile(float x, float y, float z, float w, float h, float d, float xHVel, float yHVel)
   {
@@ -28,6 +29,8 @@ class Projectile extends Object
     lifeTimer = 0;
     stepsAlive = 120;
     dead = false;
+    pierce = false;
+    pc = color(255);
   }
   
   boolean checkOnGround()
@@ -52,7 +55,7 @@ class Projectile extends Object
     else
     {
       // Emit trail particles
-      psystem.emitTrailParticle(pos.x, pos.y, pos.z, color(255));
+      psystem.emitTrailParticle(pos.x, pos.y, pos.z, pc);
     }
     
     // Position
@@ -66,8 +69,11 @@ class Projectile extends Object
       {
         world.enemies.remove(i);
         world.player.enemiesKilled++;
-        dead = true;
-        break;
+        if (!pierce)
+        {
+          dead = true;
+          break;
+        }
       }
     }
     

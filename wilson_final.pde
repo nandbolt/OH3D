@@ -30,7 +30,7 @@ void setup()
   fullScreen(P3D);
   noCursor();
   sphereDetail(6);
-  //frameRate(20);
+  //frameRate(2);
   debugMode = false;
   
   // IRobot

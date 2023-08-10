@@ -10,6 +10,7 @@ class Player extends Actor
   
   // Weapon
   int weaponTimer, fireRate, projCount, projSep;
+  int altWeaponTimer, altFireRate;
   
   Player()
   {
@@ -40,6 +41,8 @@ class Player extends Actor
     fireRate = 10;
     projCount = 1;
     projSep = 3;
+    altWeaponTimer = 0;
+    altFireRate = 180;
     
     // Scores
     stepsAlive = 0;
@@ -70,7 +73,9 @@ class Player extends Actor
     
     // Weapon
     weaponTimer = 0;
+    altWeaponTimer = 0;
     fireRate = 10;
+    altFireRate = 180;
     projCount = 1;
     projSep = 3;
   }
@@ -111,6 +116,12 @@ class Player extends Actor
     weaponTimer = fireRate;
   }
   
+  void altFire()
+  {
+    world.projs.add(new Spear(pos.x, pos.y, pos.z, hDir.x, hDir.y));
+    altWeaponTimer = altFireRate;
+  }
+  
   boolean checkOnGround()
   {
     if (pos.y >= 0) { return true; }
@@ -128,10 +139,20 @@ class Player extends Actor
     stepsAlive++;
     
     // Weapon
-    if (enemiesKilled >= weapThresh2) { projCount = 3; }
-    else if (enemiesKilled >= weapThresh1) { projCount = 2; }
+    if (enemiesKilled >= weapThresh2)
+    {
+      projCount = 3;
+      altFireRate = 60;
+    }
+    else if (enemiesKilled >= weapThresh1)
+    {
+      projCount = 2;
+      altFireRate = 120;
+    }
     if (input.getPrimaryFire() == 1 && weaponTimer <= 0) { fire(); }
     else { weaponTimer = constrain(weaponTimer - 1, 0, fireRate); }
+    if (input.getAltFire() == 1 && altWeaponTimer <= 0) { altFire(); }
+    else { altWeaponTimer = constrain(altWeaponTimer - 1, 0, altFireRate); }
     
     // Movement
     goalHVel.set(0, 0);
@@ -237,7 +258,7 @@ class Player extends Actor
     {
       super.draw();
       
-      // Projectiles BEGIN
+      // Primary weapon BEGIN
       pushMatrix();
       
       // Body
@@ -253,7 +274,24 @@ class Player extends Actor
         translate(0, 0, -projSep);
       }
       
-      // Projectiles END
+      // Primary weapon END
+      popMatrix();
+      
+      // Alt weapon BEGIN
+      pushMatrix();
+      
+      // Body
+      translate(pos.x, pos.y - 0.5, pos.z);
+      rotateX(-PI * 0.5);
+      rotateZ(-hDir.heading() - PI * 0.5);
+      rotateY(-PI * 0.5);
+      scale((altFireRate - altWeaponTimer) / (float) altFireRate);
+      translate(-0.1, 0.5, 0);
+      proj.setFill(color(0, 255, 0));
+      shape(proj);
+      proj.setFill(color(255));
+      
+      // Alt weapon END
       popMatrix();
       
       if (debugMode)
