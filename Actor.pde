@@ -15,11 +15,11 @@ class Actor extends Object
     this.h = h;
     this.d = d;
     
+    // Model
+    body = loader.chaserBody;
+    
     // Movement
     moveSpeed = 1;
-    
-    // Model
-    body = loadShape("hand.obj");
   }
   
   void draw()

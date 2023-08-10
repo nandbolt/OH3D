@@ -21,8 +21,8 @@ class Projectile extends Object
     gravStrength = 0.02;
     
     // Model
-    body = loadShape("hand.obj");
-    body.setFill(color(255));
+    body = loader.playerBlast;
+    //body.setFill(color(255));
     
     // Life
     lifeTimer = 0;

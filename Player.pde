@@ -31,10 +31,8 @@ class Player extends Actor
     camDist = 20;
     
     // Model
-    body = loadShape("disc.obj");
-    body.setFill(color(255));
-    proj = loadShape("hand.obj");
-    proj.setFill(color(255));
+    body = loader.playerCore;
+    proj = loader.playerBlast;
     
     // Weapon
     weaponTimer = 0;
@@ -249,27 +247,6 @@ class Player extends Actor
         fill(255);
         popMatrix();
       }
-    }
-    else
-    {
-      // Death BEGIN
-      pushMatrix();
-      
-      // Body
-      translate(pos.x, pos.y - 0.5, pos.z);
-      scale(0.5);
-      rotateX(-PI * 0.5);
-      rotateZ(-hDir.heading() - PI * 0.5);
-      rotateY(-PI * 0.5);
-      translate(0, -1, 2);
-      shape(body);
-      translate(0, 0, -4);
-      shape(body);
-      translate(0, 4, 2);
-      shape(body);
-      
-      // Death END
-      popMatrix();
     }
   }
   

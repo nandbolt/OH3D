@@ -18,6 +18,7 @@ boolean debugMode;
 
 Robot robot;
 Input input;
+AssetLoader loader;
 World world;
 
 void keyPressed() { input.keyPressed(); }
@@ -48,6 +49,7 @@ void setup()
   }
   
   // Init objects
+  loader = new AssetLoader();
   input = new Input();
   world = new World();
   
