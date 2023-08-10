@@ -1,11 +1,6 @@
 /*
 Checklist
 - Combo level
-- Hold to shoot
-- Weapon spray patterns
-- Follow the leader
-- Revised models
-- Revised textures
 - Shader background
 - Death animation
 - 3D particles
@@ -19,13 +14,13 @@ boolean debugMode;
 Robot robot;
 Input input;
 AssetLoader loader;
+ParticleSystem psystem;
 World world;
 
 void keyPressed() { input.keyPressed(); }
 void keyReleased() { input.keyReleased(); }
 void mouseMoved() { world.player.mouseMovedAndDragged(); }
 void mouseDragged() { world.player.mouseMovedAndDragged(); }
-//void mousePressed() { world.player.mousePressed(); }
 void mousePressed() { input.mousePressed(); }
 void mouseReleased() { input.mouseReleased(); }
 
@@ -36,7 +31,7 @@ void setup()
   noCursor();
   sphereDetail(15);
   //frameRate(20);
-  debugMode = true;
+  debugMode = false;
   
   // IRobot
   try
@@ -51,6 +46,7 @@ void setup()
   // Init objects
   loader = new AssetLoader();
   input = new Input();
+  psystem = new ParticleSystem();
   world = new World();
   
   // Move mouse to center

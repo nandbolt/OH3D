@@ -18,7 +18,7 @@ class Projectile extends Object
     
     // Movement
     hVel.set(xHVel, yHVel);
-    gravStrength = 0.02;
+    gravStrength = 0.04;
     
     // Model
     body = loader.playerBlast;
@@ -48,6 +48,11 @@ class Projectile extends Object
         yVel = 0;
         pos.y = 0;
       }
+    }
+    else
+    {
+      // Emit trail particles
+      psystem.emitTrailParticle(pos.x, pos.y, pos.z, color(255));
     }
     
     // Position

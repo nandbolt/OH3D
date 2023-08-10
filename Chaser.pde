@@ -59,5 +59,8 @@ class Chaser extends Enemy
     
     // Position
     pos.add(hVel.x, 0, hVel.y);
+    
+    // Emit trail particles
+    psystem.emitTrailParticle(pos.x, pos.y, pos.z, color(255, 0, 0));
   }
 }

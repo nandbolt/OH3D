@@ -49,6 +49,7 @@ class World
   void update()
   { 
     // Objects
+    psystem.update();
     player.update();
     espawner.update();
     cam.update();
@@ -62,6 +63,9 @@ class World
     // Background
     background(0);
     cam.draw();
+    
+    // Particles
+    psystem.draw();
     
     // Ground
     pushMatrix();

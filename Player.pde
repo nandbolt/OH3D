@@ -148,6 +148,17 @@ class Player extends Actor
       {
         // Jump
         yVel = -jumpStrength;
+        
+        // Jump trail particles
+        for (int i = 0; i < 8; i++)
+        {
+          psystem.emitTrailParticle(pos.x + random(-w, w), pos.y, pos.z + random(-d, d), color(255));
+        }
+      }
+      else
+      {
+        // Emit trail particles
+        psystem.emitTrailParticle(pos.x, pos.y, pos.z, color(255));
       }
     }
     // Gravity
@@ -289,8 +300,9 @@ class Player extends Actor
       text("Spawn pattern: " + world.espawner.displayPattern, x, y);
       y += 36;
       text("Total enemies this wave: " + world.espawner.totalEnemies, x, y);
+      y += 36;
+      text("Particles: " + psystem.particles.size(), x, y);
     }
-    
     shearY(-PI / 16);
   }
 }
