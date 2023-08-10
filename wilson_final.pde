@@ -1,8 +1,5 @@
 /*
 Checklist
-- Random wave spawning with custom spawn patterns, increase 
-- Movement
-- Healthier enemy types
 - Combo level
 - Hold to shoot
 - Weapon spray patterns
@@ -23,30 +20,13 @@ Robot robot;
 Input input;
 World world;
 
-void keyPressed()
-{
-  input.keyPressed();
-}
-
-void keyReleased()
-{
-  input.keyReleased();
-}
-
-void mouseMoved()
-{
-  world.player.mouseMovedAndDragged();
-}
-
-void mouseDragged()
-{
-  world.player.mouseMovedAndDragged();
-}
-
-void mousePressed()
-{
-  world.player.mousePressed();
-}
+void keyPressed() { input.keyPressed(); }
+void keyReleased() { input.keyReleased(); }
+void mouseMoved() { world.player.mouseMovedAndDragged(); }
+void mouseDragged() { world.player.mouseMovedAndDragged(); }
+//void mousePressed() { world.player.mousePressed(); }
+void mousePressed() { input.mousePressed(); }
+void mouseReleased() { input.mouseReleased(); }
 
 void setup()
 {

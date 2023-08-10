@@ -6,6 +6,9 @@ class Player extends Actor
   int stepsAlive, enemiesKilled, maxDistance;
   boolean dead;
   
+  // Weapon
+  int weaponTimer, fireRate, projCount;
+  
   Player()
   {
     // Parent
@@ -28,6 +31,11 @@ class Player extends Actor
     
     // Model
     body.setFill(color(255));
+    
+    // Weapon
+    weaponTimer = 0;
+    fireRate = 10;
+    projCount = 1;
     
     // Scores
     stepsAlive = 0;
@@ -75,9 +83,10 @@ class Player extends Actor
     robot.mouseMove(int(width * 0.5), int(height * 0.5));
   }
   
-  void mousePressed()
+  void fire()
   {
-    if (!dead) { world.projs.add(new Blast(pos.x, pos.y, pos.z, hDir.x, hDir.y)); }
+    world.projs.add(new Blast(pos.x, pos.y, pos.z, hDir.x, hDir.y));
+    weaponTimer = fireRate;
   }
   
   boolean checkOnGround()
@@ -90,6 +99,10 @@ class Player extends Actor
   {
     // Alive timer
     stepsAlive++;
+    
+    // Weapon
+    if (input.getPrimaryFire() == 1 && weaponTimer <= 0) { fire(); }
+    else { weaponTimer = constrain(weaponTimer - 1, 0, fireRate); }
     
     // Movement
     goalHVel.set(0, 0);
