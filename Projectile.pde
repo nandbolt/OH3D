@@ -60,6 +60,7 @@ class Projectile extends Object
       if (Math.colliding(pos, w, h, d, e.pos, e.w, e.h, e.d))
       {
         world.enemies.remove(i);
+        world.player.enemiesKilled++;
         dead = true;
         break;
       }

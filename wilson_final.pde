@@ -53,6 +53,8 @@ void setup()
   // Init game
   fullScreen(P3D);
   noCursor();
+  sphereDetail(15);
+  //frameRate(20);
   debugMode = false;
   
   // IRobot

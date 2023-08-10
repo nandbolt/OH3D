@@ -3,6 +3,24 @@ class Input
   // Keys
   int[] keys = new int[9];
   
+  // Mouse
+  float mouseHSense, mouseVSense;
+  
+  Input()
+  {
+    // Home
+    mouseHSense = 0.003;
+    mouseVSense = 0.006;
+    
+    // Laptop
+    //mouseSense = 0.001;
+    //mouseVSense = 0.002;
+    
+    // Computer lab
+    //mouseSense = 0.001;
+    //mouseVSense = 0.002;
+  }
+  
   void keyPressed()
   {
     if (key == 'a' || key == 'A') { keys[0] = 1; }

@@ -1,9 +1,9 @@
 class Player extends Actor
 {
-  PVector goalHVel, goalRotVel;
-  float jumpStrength, moveSpeed, gravStrength;
-  float camMinHDist, camMaxHeight;
-  int stepsAlive;
+  PVector vDir, goalHVel, goalRotVel;
+  float jumpStrength, gravStrength;
+  float camDist;
+  int stepsAlive, enemiesKilled, maxDistance;
   boolean dead;
   
   Player()
@@ -14,37 +14,43 @@ class Player extends Actor
     
     // Dimensions
     hDir.rotate(-PI/4);
-    vDir.set(0.4, -0.9);
-    vDir.normalize();
+    vDir = PVector.fromAngle(-PI / 3);
     
     // Movement
     goalHVel = new PVector(0, 0);
     goalRotVel = new PVector(0, 0);
-    moveSpeed = 0.6;
+    moveSpeed = 0.4;
     jumpStrength = 0.3;
     gravStrength = 0.01;
     
     // Camera
-    camMinHDist = 20;
-    camMaxHeight = 20;
+    camDist = 20;
     
     // Model
     body.setFill(color(255));
+    
+    // Scores
+    stepsAlive = 0;
+    enemiesKilled = 0;
+    maxDistance = 0;
   }
   
   void restart()
   {
     dead = false;
-    stepsAlive = 0;
     
     pos.set(0, 0, 0);
     hVel.set(0, 0);
     yVel = 0;
     hDir.set(0, 1);
     hDir.rotate(-PI/4);
-    vDir.set(0.4, -0.9);
-    vDir.normalize();
+    vDir = PVector.fromAngle(-PI / 3);
     goalHVel.set(0, 0);
+    
+    // Scores
+    stepsAlive = 0;
+    enemiesKilled = 0;
+    maxDistance = 0;
   }
   
   void mouseMovedAndDragged()
@@ -53,15 +59,14 @@ class Player extends Actor
     { 
       // Rotate horizontally
       //if (pmouseX == int(width * 0.5)) { hDir.rotate((mouseX - pmouseX) * 0.003); }
-      if (pmouseX == int(width * 0.5)) { goalRotVel.x += (mouseX - pmouseX) * 0.003; }
+      if (pmouseX == int(width * 0.5)) { goalRotVel.x += (mouseX - pmouseX) * input.mouseHSense; }
       
       // Rotate vertically
       if (pmouseY == int(height * 0.5))
       {
         // Clamp rotation
         float currAngle = vDir.heading();
-        float goalDir = (mouseY - pmouseY) * 0.003;
-        //if ((goalDir > 0 && currAngle + goalDir < -0.2) || (goalDir < 0 && currAngle + goalDir > -1.5)) { vDir.rotate(goalDir); }
+        float goalDir = (mouseY - pmouseY) * input.mouseVSense;
         if ((goalDir > 0 && currAngle + goalDir < -0.2) || (goalDir < 0 && currAngle + goalDir > -1.5)) { goalRotVel.y = goalDir; }
       }
     }
@@ -128,8 +133,8 @@ class Player extends Actor
     }
     
     // Rotation
-    float xRotVel = lerp(0, goalRotVel.x, 0.3);
-    float yRotVel = lerp(0, goalRotVel.y, 0.6);
+    float xRotVel = lerp(0, goalRotVel.x, 0.4);
+    float yRotVel = lerp(0, goalRotVel.y, 0.4);
     hDir.rotate(xRotVel);
     vDir.rotate(yRotVel);
     goalRotVel.x -= xRotVel;
@@ -138,18 +143,20 @@ class Player extends Actor
     // Position
     pos.add(hVel.x, yVel, hVel.y);
     
+    // Displacement score
+    float dist = pos.mag();
+    if (dist > maxDistance) { maxDistance = int(dist); }
+    
     // Camera movement
-    world.cam.eye.x = pos.x;
-    world.cam.eye.z = pos.z;
-    world.cam.eye.y = pos.y;
     world.cam.center.x = pos.x;
-    world.cam.center.y = pos.y;
     world.cam.center.z = pos.z;
+    world.cam.center.y = pos.y;
     
     // Camera rotation
-    world.cam.eye.x -= hDir.x * camMinHDist;
-    world.cam.eye.y -= vDir.x * camMaxHeight;
-    world.cam.eye.z -= hDir.y * camMinHDist;
+    world.cam.rEye.x = -hDir.x * sin(vDir.heading() + PI);
+    world.cam.rEye.y = -vDir.x;
+    world.cam.rEye.z = -hDir.y * sin(vDir.heading() + PI);
+    world.cam.rEye.setMag(camDist);
     
     // Collision
     for (int i = 0; i < world.enemies.size(); i++)
@@ -171,7 +178,27 @@ class Player extends Actor
   
   void draw()
   {
-    if (!dead) { super.draw(); }
+    if (!dead)
+    {
+      super.draw();
+      
+      if (debugMode)
+      {
+        // Debug BEGIN
+        pushMatrix();
+        
+        // Swarm sphere (BOIDS)
+        translate(pos.x, pos.y - h * 0.5, pos.z);
+        noFill();
+        stroke(255);
+        //sphere(128);
+        
+        // Debug END
+        stroke(0);
+        fill(255);
+        popMatrix();
+      }
+    }
     else
     {
       // Death BEGIN
@@ -200,14 +227,18 @@ class Player extends Actor
     float x, y;
     String time = String.format("%.1f", stepsAlive / 60.0);
     
-    // Timer
+    // HUD
     x = 64;
     y = 32;
     fill(0, 255, 0);
     shearY(PI / 16);
     textSize(32);
     textAlign(LEFT, TOP);
-    text(time, x, y);
+    text("Time alive: " + time, x, y);
+    y += 36;
+    text("Enemies killed: " + enemiesKilled, x, y);
+    y += 36;
+    text("Max distance: " + maxDistance, x, y);
     
     // Dead
     if (dead)
@@ -226,6 +257,10 @@ class Player extends Actor
       text("Framerate: " + int(frameRate), x, y);
       y += 36;
       text("Enemies: " + world.enemies.size(), x, y);
+      y += 36;
+      text("Spawn pattern: " + world.espawner.displayPattern, x, y);
+      y += 36;
+      text("Total enemies this wave: " + world.espawner.totalEnemies, x, y);
     }
     
     shearY(-PI / 16);

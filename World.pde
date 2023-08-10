@@ -12,9 +12,7 @@ class World
   
   // Enemies
   ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-  int stepsBetweenEnemies;
-  int enemyTimer;
-  PVector spawnRelativePos;
+  EnemySpawner espawner;
   
   World()
   {
@@ -23,6 +21,7 @@ class World
     // Objects
     cam = new Camera();
     player = new Player();
+    espawner = new EnemySpawner();
     
     // Ground
     groundTex = loadImage("grid.png");
@@ -36,11 +35,6 @@ class World
     ground.vertex(-chunkSize * 0.5, 0, chunkSize * 0.5, chunkSize * 0.1, 0);
     ground.vertex(-chunkSize * 0.5, 0, -chunkSize * 0.5, 0, 0);
     ground.endShape();
-    
-    // Enemies
-    spawnRelativePos = new PVector(400, 0);;
-    stepsBetweenEnemies = 60;
-    enemyTimer = stepsBetweenEnemies;
   }
   
   void restart()
@@ -51,30 +45,15 @@ class World
     
     // Player
     player.restart();
-  }
-  
-  void spawnEnemy(float x, float z)
-  {
-    enemies.add(new Chaser(x, 0, z));
+    espawner.restart();
   }
   
   void update()
   { 
-    // Timers
-    if (!player.dead)
-    {
-      // Enemy
-      if (enemyTimer <= 0)
-      {
-        spawnRelativePos.rotate(random(2 * PI));
-        spawnEnemy(player.pos.x + spawnRelativePos.x, player.pos.z + spawnRelativePos.y);
-        enemyTimer = stepsBetweenEnemies;
-      }
-      else { enemyTimer--; }
-    }
-    
     // Objects
     player.update();
+    espawner.update();
+    cam.update();
     for (int i = 0; i < projs.size(); i++) { projs.get(i).update(); }
     for (int i = 0; i < enemies.size(); i++) { enemies.get(i).update(); }
   }
@@ -108,6 +87,7 @@ class World
     
     // DRAW GUI
     hint(DISABLE_DEPTH_TEST);
+    perspective();
     camera();
     noLights();
     player.drawGui();
