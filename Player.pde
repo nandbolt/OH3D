@@ -294,6 +294,22 @@ class Player extends Actor
       // Alt weapon END
       popMatrix();
       
+      // Compass
+      stroke(255, 255, 0);
+      strokeWeight(4);
+      PVector r = new PVector(0, 0);
+      float dist = 0;
+      for (int i = 0; i < world.enemies.size(); i++)
+      {
+        Enemy e = world.enemies.get(i);
+        r.set(e.pos.x - pos.x, e.pos.y - pos.y, e.pos.z - pos.z);
+        dist = r.mag();
+        r.setMag(constrain((200 - dist) / 200 * 3, 0, 3));;
+        line(pos.x, pos.y, pos.z, pos.x + r.x, pos.y + r.y, pos.z + r.z);
+      }
+      stroke(0);
+      strokeWeight(1);
+      
       if (debugMode)
       {
         // Debug BEGIN
