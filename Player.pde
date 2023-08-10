@@ -6,6 +6,7 @@ class Player extends Actor
   int stepsAlive, enemiesKilled, maxDistance;
   boolean dead;
   PShape proj;
+  float weapThresh1, weapThresh2;
   
   // Weapon
   int weaponTimer, fireRate, projCount, projSep;
@@ -44,6 +45,10 @@ class Player extends Actor
     stepsAlive = 0;
     enemiesKilled = 0;
     maxDistance = 0;
+    
+    // Other
+    weapThresh1 = 50;
+    weapThresh2 = 200;
   }
   
   void restart()
@@ -54,7 +59,7 @@ class Player extends Actor
     hVel.set(0, 0);
     yVel = 0;
     hDir.set(0, 1);
-    hDir.rotate(-PI/4);
+    hDir.rotate(-PI / 4);
     vDir = PVector.fromAngle(-PI / 3);
     goalHVel.set(0, 0);
     
@@ -123,6 +128,8 @@ class Player extends Actor
     stepsAlive++;
     
     // Weapon
+    if (enemiesKilled >= weapThresh2) { projCount = 3; }
+    else if (enemiesKilled >= weapThresh1) { projCount = 2; }
     if (input.getPrimaryFire() == 1 && weaponTimer <= 0) { fire(); }
     else { weaponTimer = constrain(weaponTimer - 1, 0, fireRate); }
     
@@ -285,6 +292,7 @@ class Player extends Actor
     text("Enemies killed: " + enemiesKilled, x, y);
     y += 36;
     text("Max distance: " + maxDistance, x, y);
+    y += 36;
     
     // Dead
     if (dead)
