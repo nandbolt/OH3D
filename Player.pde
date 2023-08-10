@@ -7,12 +7,12 @@ class Player extends Actor
   boolean dead;
   
   // Weapon
-  int weaponTimer, fireRate, projCount;
+  int weaponTimer, fireRate, projCount, projSep;
   
   Player()
   {
     // Parent
-    super(0, 0, 0, 1, 1, 1);
+    super(0, 0, 0, 2, 0.5, 2);
     dead = false;
     
     // Dimensions
@@ -30,12 +30,14 @@ class Player extends Actor
     camDist = 20;
     
     // Model
+    body = loadShape("disc.obj");
     body.setFill(color(255));
     
     // Weapon
     weaponTimer = 0;
     fireRate = 10;
     projCount = 1;
+    projSep = 3;
     
     // Scores
     stepsAlive = 0;
@@ -59,6 +61,12 @@ class Player extends Actor
     stepsAlive = 0;
     enemiesKilled = 0;
     maxDistance = 0;
+    
+    // Weapon
+    weaponTimer = 0;
+    fireRate = 10;
+    projCount = 1;
+    projSep = 3;
   }
   
   void mouseMovedAndDragged()
@@ -85,7 +93,15 @@ class Player extends Actor
   
   void fire()
   {
-    world.projs.add(new Blast(pos.x, pos.y, pos.z, hDir.x, hDir.y));
+    PVector r = PVector.fromAngle(hDir.heading() - PI / 2);
+    PVector rInc = new PVector(-r.x, -r.y);
+    rInc.mult(projSep);
+    r.mult((projCount - 1) * projSep * 0.5);
+    for (int i = 0; i < projCount; i++)
+    {
+      world.projs.add(new Blast(pos.x + r.x, pos.y, pos.z + r.y, hDir.x, hDir.y));
+      r.add(rInc);
+    }
     weaponTimer = fireRate;
   }
   

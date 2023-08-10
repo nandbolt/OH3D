@@ -35,7 +35,7 @@ void setup()
   noCursor();
   sphereDetail(15);
   //frameRate(20);
-  debugMode = false;
+  debugMode = true;
   
   // IRobot
   try
