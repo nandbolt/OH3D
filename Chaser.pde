@@ -54,7 +54,7 @@ class Chaser extends Enemy
     
     // Velocity
     r.setMag(moveSpeed);
-    hVel.lerp(r, 0.02);
+    hVel.lerp(r, 0.01);
     hDir.rotate(Math.angleDifference(hDir.heading(), hVel.heading()));
     
     // Position

@@ -29,7 +29,7 @@ void setup()
   // Init game
   fullScreen(P3D);
   noCursor();
-  sphereDetail(15);
+  sphereDetail(6);
   //frameRate(20);
   debugMode = false;
   

@@ -24,7 +24,7 @@ class EnemySpawner
     timer = stepsBetweenEnemies;
     currPattern = SpawnPattern.NONE;
     displayPattern = currPattern;
-    totalEnemies = 0;
+    totalEnemies = 2;
     enemiesSpawned = 0;
     angleInc = 0;
   }
@@ -35,7 +35,7 @@ class EnemySpawner
     displayPattern = currPattern;
     stepsBetweenEnemies = 60;
     timer = stepsBetweenEnemies;
-    totalEnemies = 0;
+    totalEnemies = 2;
   }
   
   void spawnEnemy()

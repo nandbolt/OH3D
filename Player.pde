@@ -112,6 +112,11 @@ class Player extends Actor
     return false;
   }
   
+  boolean onSpikes()
+  {
+    return false;
+  }
+  
   void aliveUpdate()
   {
     // Alive timer
@@ -143,8 +148,10 @@ class Player extends Actor
     // Ground check
     if (checkOnGround())
     {
+      // If on spikes
+      if (onSpikes()) { dead = true; }
       // Jump check
-      if (input.getActionJump() == 1)
+      else if (input.getActionJump() == 1)
       {
         // Jump
         yVel = -jumpStrength;
