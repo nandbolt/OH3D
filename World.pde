@@ -20,7 +20,7 @@ class World
   int highestEnemiesKilled;
   int highestMaxDistance;
   
-  // Main menu
+  // Menus
   boolean mainMenu;
   
   World()
@@ -50,7 +50,11 @@ class World
     highestEnemiesKilled = saveData.getJSONObject(1).getInt("value");
     highestMaxDistance = saveData.getJSONObject(2).getInt("value");
     
-    // Main menu
+    // Load mouse sense
+    input.mouseHSense = saveData.getJSONObject(3).getFloat("value");
+    input.mouseVSense = saveData.getJSONObject(4).getFloat("value");
+    
+    // Menus
     mainMenu = true;
   }
   
@@ -131,8 +135,7 @@ class World
     perspective();
     camera();
     noLights();
-    if (!mainMenu) { player.drawGui(); }
-    else
+    if (mainMenu)
     {
       // Main menu
       pushMatrix();
@@ -166,6 +169,7 @@ class World
       fill(255);
       popMatrix();
     }
+    else { player.drawGui(); }
     hint(ENABLE_DEPTH_TEST);
   }
 }

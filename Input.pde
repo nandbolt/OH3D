@@ -5,21 +5,16 @@ class Input
   
   // Mouse
   int[] mbuttons = new int[2];
-  float mouseHSense, mouseVSense;
+  float mouseHSense, mouseVSense, mouseInc, minMouseSense, maxMouseSense;
   
   Input()
   {
     // Home
     mouseHSense = 0.003;
     mouseVSense = 0.006;
-    
-    // Laptop
-    //mouseSense = 0.001;
-    //mouseVSense = 0.002;
-    
-    // Computer lab
-    //mouseSense = 0.001;
-    //mouseVSense = 0.002;
+    mouseInc = 0.0001;
+    minMouseSense = 0;
+    maxMouseSense = 1;
   }
   
   void keyPressed()
@@ -29,6 +24,25 @@ class Input
     else if (key == 'w' || key == 'W') { keys[2] = 1; }
     else if (key == 's' || key == 'S') { keys[3] = 1; }
     else if (key == ' ') { keys[4] = 1; }
+    else if (key == CODED)
+    {
+      if (keyCode == RIGHT || keyCode == LEFT || keyCode == UP || keyCode == DOWN)
+      {
+        if (keyCode == RIGHT || keyCode == LEFT)
+        {
+          if (keyCode == RIGHT) { mouseHSense = constrain(mouseHSense + mouseInc, minMouseSense, maxMouseSense); }
+          else if (keyCode == LEFT) { mouseHSense = constrain(mouseHSense - mouseInc, minMouseSense, maxMouseSense); }
+          world.saveData.getJSONObject(3).setFloat("value", mouseHSense);
+        }
+        else
+        {
+          if (keyCode == UP) { mouseVSense = constrain(mouseVSense + mouseInc, minMouseSense, maxMouseSense); }
+          else if (keyCode == DOWN) { mouseVSense = constrain(mouseVSense - mouseInc, minMouseSense, maxMouseSense); }
+          world.saveData.getJSONObject(4).setFloat("value", mouseVSense);
+        }
+        saveJSONArray(world.saveData, "data/save-data.txt");
+      }
+    }
   }
   
   void keyReleased()

@@ -382,18 +382,17 @@ class Player extends Actor
     if (maxDistance >= world.highestMaxDistance) { fill(255, 255, 0); }
     text("Max distance: " + maxDistance + " (" + world.highestMaxDistance + ")", x, y);
     fill(0, 255, 0);
-    y += 36;
     
     // Dead
     if (dead)
     {
-      y += 36 * 2;
+      y += 36 * 3;
       text("Press R to restart.", x, y);
     }
     
     if (debugMode)
     {
-      y += 36 * 2;
+      y += 36 * 3;
       text("Pos: (" + int(pos.x) + ", " + int(pos.y) + ", " + int(pos.z) + ")", x, y);
       y += 36;
       text("HSpeed: " + hVel.mag(), x, y);
@@ -408,6 +407,17 @@ class Player extends Actor
       y += 36;
       text("Particles: " + psystem.particles.size(), x, y);
     }
+    
+    // Mouse sense
+    fill(0, 255, 255);
+    textSize(24);
+    y += 36 * 3;
+    text("Mouse (Adjust with arrow keys)", x, y);
+    y += 36;
+    text("X Sense: " + String.format("%.4f", input.mouseHSense), x, y);
+    y += 36;
+    text("Y Sense: " + String.format("%.4f", input.mouseVSense), x, y);
+    fill(255);
     shearY(-PI / 16);
   }
 }
