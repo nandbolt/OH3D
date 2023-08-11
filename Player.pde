@@ -16,7 +16,7 @@ class Player extends Actor
   {
     // Parent
     super(0, 0, 0, 2, 0.5, 2);
-    dead = false;
+    dead = true;
     
     // Dimensions
     hDir.rotate(-PI/4);

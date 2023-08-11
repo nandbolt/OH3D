@@ -5,7 +5,7 @@ class Camera
   Camera()
   {
     center = new PVector(0, 0, 0);
-    rEye = new PVector(0, 0, 20);
+    rEye = new PVector(-12, -10, -12);
     eye = new PVector(center.x + rEye.x, center.y + rEye.y, center.z + rEye.z);
     up = new PVector(0, 1, 0);
   }

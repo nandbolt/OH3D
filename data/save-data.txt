@@ -1,14 +1,14 @@
 [
   {
     "score": "time",
-    "value": 0
+    "value": 3983
   },
   {
     "score": "enemies",
-    "value": 0
+    "value": 62
   },
   {
     "score": "distance",
-    "value": 0
+    "value": 802
   }
 ]
