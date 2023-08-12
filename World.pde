@@ -70,6 +70,9 @@ class World
     // Player
     player.restart();
     espawner.restart();
+    
+    // Blip sound
+    loader.sndBlip.play();
   }
   
   boolean touchingSpikes(float x, float z)
@@ -168,6 +171,12 @@ class World
       text("Furthest Max Distance:   " + highestMaxDistance, 0, 0);
       fill(255);
       popMatrix();
+      
+      // Credits
+      textAlign(RIGHT, BOTTOM);
+      fill(255, 0, 255);
+      text("created by nandbolt, v0.0.1", width - 64, height - 32);
+      fill(255);
     }
     else { player.drawGui(); }
     hint(ENABLE_DEPTH_TEST);

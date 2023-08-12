@@ -114,12 +114,18 @@ class Player extends Actor
       r.add(rInc);
     }
     weaponTimer = fireRate;
+    
+    // Blast sound
+    loader.sndBlast.play();
   }
   
   void altFire()
   {
     world.projs.add(new Spear(pos.x, pos.y, pos.z, hDir.x, hDir.y));
     altWeaponTimer = altFireRate;
+    
+    // Blast sound
+    loader.sndSpear.play();
   }
   
   boolean checkOnGround()
@@ -160,6 +166,9 @@ class Player extends Actor
         highScore = true;
       }
       if (highScore) { saveJSONArray(world.saveData, "data/save-data.txt"); }
+      
+      // Death sound
+      loader.sndPlayerHurt.play();
     }
   }
   
@@ -219,6 +228,9 @@ class Player extends Actor
         {
           psystem.emitTrailParticle(pos.x + random(-w, w), pos.y, pos.z + random(-d, d), color(255));
         }
+        
+        // Jump sound
+        if (!loader.sndJump.isPlaying()) { loader.sndJump.play(); }
       }
       else
       {

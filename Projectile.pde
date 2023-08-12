@@ -67,10 +67,16 @@ class Projectile extends Object
       Enemy e = world.enemies.get(i);
       if (Math.colliding(pos, w, h, d, e.pos, e.w, e.h, e.d))
       {
+        // Kill enemy
         world.enemies.remove(i);
         world.player.enemiesKilled++;
+        
+        // Enemy hurt sound
+        loader.sndEnemyHurt.play();
+        
         if (!pierce)
         {
+          // Destroy projectile
           dead = true;
           break;
         }

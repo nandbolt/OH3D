@@ -1,13 +1,13 @@
 /*
-Checklist
-- Combo level
-- Shader background
-- Death animation
-- 3D particles
+OH3D v0.0.1 by Alexander Wilson (nandbolt)
+
+Final project for CS 324E (Elements of Graphics)
+
+The game will be posted on itch.io. Here's the link: https://nandbolt.itch.io/
 */
 
-
 import java.awt.*;
+import processing.sound.*;
 
 boolean debugMode;
 
@@ -43,8 +43,16 @@ void setup()
     e.printStackTrace();
   }
   
-  // Init objects
+  // Load assets
   loader = new AssetLoader();
+  loader.sndBlast = new SoundFile(this, "shoot-blast.wav");
+  loader.sndSpear = new SoundFile(this, "shoot-spear.wav");
+  loader.sndPlayerHurt = new SoundFile(this, "player-hurt.wav");
+  loader.sndEnemyHurt = new SoundFile(this, "enemy-hurt.wav");
+  loader.sndJump = new SoundFile(this, "jump.wav");
+  loader.sndBlip = new SoundFile(this, "blip.wav");
+  
+  // Init objects
   input = new Input();
   psystem = new ParticleSystem();
   world = new World();

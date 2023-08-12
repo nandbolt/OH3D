@@ -1,5 +1,8 @@
 class AssetLoader
 {
+  // Audio
+  SoundFile sndBlast, sndSpear, sndPlayerHurt, sndEnemyHurt, sndJump, sndBlip;
+  
   // Ground
   PImage groundTex;
   
