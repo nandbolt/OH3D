@@ -2,8 +2,6 @@
 OH3D v0.0.1 by Alexander Wilson (nandbolt)
 
 Final project for CS 324E (Elements of Graphics)
-
-The game will be posted on itch.io. Here's the link: https://nandbolt.itch.io/
 */
 
 import java.awt.*;

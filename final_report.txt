@@ -1,0 +1,50 @@
+Final project for CS 324E (Elements of Graphics)
+
+Title: OH3D
+
+Group
+- Alexander Wilson
+
+Summary:
+You control a 3D ship on an infinite plane. Waves of increasingly difficult enemies spawn around you. Your
+only goals are to survive, kill enemies and travel far from your starting location. To move around, use
+the AWSD keys, SPACE to jump, LEFT MOUSE BUTTON to use your primary fire, RIGHT MOUSE BUTTON to use your
+alternate fire, R to play/restart, ESC to quit, and the ARROW KEYS to adjust mouse sensitivity.
+
+Basic Requirements
+- Keyboard interactivity: AWSD to move and SPACE to jump.
+- Multiple GUI systems: Main menu prompt. HUD display. Game Over display.
+- Class objects with animation heirarchies: actors move around the world and rotate about. The player also
+  displays the projectile before its shot, with the scaling representing the cooldown.
+- Data input/output: the score and mouse sensitivity is saved and loaded from a JSON file.
+
+Unexpected challenges
+- I had difficulties wrapping textures on premade models and resorted to using the vertex functions to
+  create a shape and calling the texture wrap within shape creation.
+- Working with certain imported models caused huge performance issues when trying to set their textures.
+- The 3D camera was more difficult to work with than expected and resorted to using 2 2D vectors that could
+  use the rotate function instead of one that couldn't to represent looking direction.
+
+Classes
+- Actor: base class for anything that "thinks", in this case the enemies and the player.
+- AssetLoader: loads assets at the start of the game such as sounds, models and textures to avoid loading
+  during gameplay. Also allows for objects to "share" assets.
+- Blast: the primary fire projectile of the player. Collides with enemies and gets destroyed.
+- Camera: houses the camera drawing, updating, position and orientation.
+- Chaser: the only enemy in the game. Chases the player, causing death on collision.
+- Enemy: the parent class of all enemies. Houses general enemy info.
+- EnemySpawner: spawns enemies in a variety of patterns, keeping track of all info that is required.
+  Contains an enum for spawn patterns.
+- Input: stores and checks keyboard and mouse inputs from the player.
+- Math: a static function that houses pure math functions used for collisions.
+- Object: a general class that represents objects that have a physical appearance in the game.
+- Particle: 3D particle used by the particle system for various effects.
+- ParticleSystem: houses particle emission information. Can be used by other classes to emit particles.
+- ParticleTrail: extends particle, used to make the trail behind moving objects on the ground.
+- Player: houses all player information and allows the user to control a 3D ship. Manipulates the camera
+  based on the ships looking direction.
+- Spear: an extended version of the projectile class that can pierce through enemies and is green.
+- Spike: unused, but was planned to be an environmental object that was generated around the world
+  with a noise generator.
+- World: holds most of the world/level information and calls all of the objects in the world's draw and
+  update functions.
